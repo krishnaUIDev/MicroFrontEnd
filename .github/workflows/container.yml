@@ -2,26 +2,28 @@ name: deploy-container
 
 on:
   push:
-    branch:
+    branches:
       - master
     paths:
       - 'container/**'
 
-defaults: 
+defaults:
   run:
     working-directory: container
 
-jobs: 
+jobs:
   build:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - run: yarn install
-      - run: yarn run build
+      - run: npm install
+      - run: npm run build
+        env:
+          PRODUCTION_DOMAIN: ${{ secrets.PRODUCTION_DOMAIN }}
 
-      - uses: chrislennon/actions-aws-cli@v1.1
+      - uses: shinyinc/action-aws-cli@v1.2
       - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID}}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
