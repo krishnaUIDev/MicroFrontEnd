@@ -1,0 +1,11 @@
+/auth/node_modules
+/auth/dist
+
+/container/node_modules
+/container/dist
+
+/dashboard/node_modules
+/dashboard/dist
+
+/marketing/node_modules
+/marketing/dist
